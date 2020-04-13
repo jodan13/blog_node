@@ -91,11 +91,11 @@ exports.getUser = (req, res) => {
 exports.login = (req, res) => {
   let { email, password } = req.body;
   if (!email) {
-    responseClient(res, 400, 2, '用户邮箱不可为空');
+    responseClient(res, 400, 2, 'Почтовый ящик пользователя не может быть пустым');
     return;
   }
   if (!password) {
-    responseClient(res, 400, 2, '密码不可为空');
+    responseClient(res, 400, 2, 'Пароль не может быть пустым');
     return;
   }
   User.findOne({
@@ -104,11 +104,11 @@ exports.login = (req, res) => {
   })
     .then(userInfo => {
       if (userInfo) {
-        //登录成功后设置session
+        //Установить сеанс после успешного входа
         req.session.userInfo = userInfo;
-        responseClient(res, 200, 0, '登录成功', userInfo);
+        responseClient(res, 200, 0, 'Успешный вход', userInfo);
       } else {
-        responseClient(res, 400, 1, '用户名或者密码错误');
+        responseClient(res, 400, 1, 'Неверное имя пользователя или пароль');
       }
     })
     .catch(err => {
@@ -121,7 +121,7 @@ exports.userInfo = (req, res) => {
   if (req.session.userInfo) {
     responseClient(res, 200, 0, '', req.session.userInfo);
   } else {
-    responseClient(res, 200, 1, '请重新登录', req.session.userInfo);
+    responseClient(res, 200, 1, 'Провинция гуандун', req.session.userInfo);
   }
 };
 
@@ -131,44 +131,44 @@ exports.currentUser = (req, res) => {
   if (user) {
     user.avatar = 'http://p61te2jup.bkt.clouddn.com/WechatIMG8.jpeg';
     user.notifyCount = 0;
-    user.address = '广东省';
+    user.address = 'Провинция гуандун';
     user.country = 'China';
     user.group = 'BiaoChenXuying';
-    (user.title = '交互专家'), (user.signature = '海纳百川，有容乃大');
+    (user.title = 'Эксперт по взаимодействию'), (user.signature = 'В мире так много рек');
     user.tags = [];
     user.geographic = {
       province: {
-        label: '广东省',
+        label: 'Провинция гуандун',
         key: '330000',
       },
       city: {
-        label: '广州市',
+        label: 'Гуанчжоу ',
         key: '330100',
       },
     };
     responseClient(res, 200, 0, '', user);
   } else {
-    responseClient(res, 200, 1, '请重新登录', user);
+    responseClient(res, 200, 1, 'Пожалуйста, войдите снова', user);
   }
 };
 
 exports.logout = (req, res) => {
   if (req.session.userInfo) {
     req.session.userInfo = null; // 删除session
-    responseClient(res, 200, 0, '登出成功！！');
+    responseClient(res, 200, 0, 'Вы не авторизовались! ! ! ');
   } else {
-    responseClient(res, 200, 1, '您还没登录！！！');
+    responseClient(res, 200, 1, 'Вы не авторизовались! ! ! ');
   }
 };
 
 exports.loginAdmin = (req, res) => {
   let { email, password } = req.body;
   if (!email) {
-    responseClient(res, 400, 2, '用户邮箱不可为空');
+    responseClient(res, 400, 2, 'Почтовый ящик пользователя не может быть пустым');
     return;
   }
   if (!password) {
-    responseClient(res, 400, 2, '密码不可为空');
+    responseClient(res, 400, 2, 'Пароль не может быть пустым');
     return;
   }
   User.findOne({
@@ -178,14 +178,14 @@ exports.loginAdmin = (req, res) => {
     .then(userInfo => {
       if (userInfo) {
         if (userInfo.type === 0) {
-          //登录成功后设置session
+          //Установить сеанс после успешного входа
           req.session.userInfo = userInfo;
-          responseClient(res, 200, 0, '登录成功', userInfo);
+          responseClient(res, 200, 0, 'Успешный вход', userInfo);
         } else {
-          responseClient(res, 403, 1, '只有管理员才能登录后台！');
+          responseClient(res, 403, 1, 'Только администратор может войти в фоновом режиме!');
         }
       } else {
-        responseClient(res, 400, 1, '用户名或者密码错误');
+        responseClient(res, 400, 1, 'Неверное имя пользователя или пароль');
       }
     })
     .catch(err => {
@@ -196,32 +196,32 @@ exports.loginAdmin = (req, res) => {
 exports.register = (req, res) => {
   let { name, password, phone, email, introduce, type } = req.body;
   if (!email) {
-    responseClient(res, 400, 2, '用户邮箱不可为空');
+    responseClient(res, 400, 2, 'Почтовый ящик пользователя не может быть пустым');
     return;
   }
   const reg = new RegExp(
     '^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$',
   ); //正则表达式
   if (!reg.test(email)) {
-    responseClient(res, 400, 2, '请输入格式正确的邮箱！');
+    responseClient(res, 400, 2, 'Пожалуйста, введите правильный формат электронной почты!');
     return;
   }
   if (!name) {
-    responseClient(res, 400, 2, '用户名不可为空');
+    responseClient(res, 400, 2, 'Имя пользователя не может быть пустым');
     return;
   }
   if (!password) {
-    responseClient(res, 400, 2, '密码不可为空');
+    responseClient(res, 400, 2, 'Пароль не может быть пустым');
     return;
   }
   //验证用户是否已经在数据库中
   User.findOne({ email: email })
     .then(data => {
       if (data) {
-        responseClient(res, 200, 1, '用户邮箱已存在！');
+        responseClient(res, 200, 1, 'Пароль не может быть пустым');
         return;
       }
-      //保存到数据库
+      //Сохранить в базе данных
       let user = new User({
         email,
         name,
@@ -231,7 +231,7 @@ exports.register = (req, res) => {
         introduce,
       });
       user.save().then(data => {
-        responseClient(res, 200, 0, '注册成功', data);
+        responseClient(res, 200, 0, 'Успешная регистрация', data);
       });
     })
     .catch(err => {
@@ -245,9 +245,9 @@ exports.delUser = (req, res) => {
   User.deleteMany({ _id: id })
     .then(result => {
       if (result.n === 1) {
-        responseClient(res, 200, 0, '用户删除成功!');
+        responseClient(res, 200, 0, 'Пользователь успешно удален!');
       } else {
-        responseClient(res, 200, 1, '用户不存在');
+        responseClient(res, 200, 1, 'Пользователь не существует');
       }
     })
     .catch(err => {

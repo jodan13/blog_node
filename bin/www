@@ -32,7 +32,7 @@ server.listen(port,() => {
   const host = server.address().address
   const port = server.address().port
 
-  console.log("应用实例，访问地址为 http://%s:%s", host, port)
+  console.log("Пример приложения, адрес доступа: http://%s:%s", host, port)
 })
 server.on('error', onError);
 server.on('listening', onListening);

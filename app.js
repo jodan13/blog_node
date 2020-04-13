@@ -23,10 +23,10 @@ app.use(cookieParser('blog_node_cookie'));
 app.use(
 	session({
 		secret: 'blog_node_cookie',
-		name: 'session_id', //# 在浏览器中生成cookie的名称key，默认是connect.sid
+		name: 'session_id', //# Генерируем ключ имени куки в браузере, по умолчанию это connect.sid
 		resave: true,
 		saveUninitialized: true,
-		cookie: { maxAge: 60 * 1000 * 30, httpOnly: true }, //过期时间
+		cookie: { maxAge: 60 * 1000 * 30, httpOnly: true }, //Лимит времени
 	}),
 );
 
@@ -35,10 +35,10 @@ const mongodb = require('./core/mongodb');
 // data server
 mongodb.connect();
 
-//将路由文件引入
+//Импортируем файл маршрутизации 
 const route = require('./routes/index');
 
-//初始化所有路由
+//Инициализируем все маршруты
 route(app);
 
 // catch 404 and forward to error handler

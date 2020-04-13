@@ -1,6 +1,6 @@
 /**
  * Mongoose module.
- * @file 数据库模块
+ * @file модуль базы данных
  * @module core/mongoose
  * @author  biaochenxuying <https://github.com/biaochenxuying>
  */
@@ -24,26 +24,26 @@ exports.mongoose = mongoose
 exports.connect = () => {
     // console.log('CONFIG.MONGODB.uri :', CONFIG.MONGODB.uri)
 
-	// 连接数据库
+	// Подключаемся к базе данных
 	mongoose.connect(CONFIG.MONGODB.uri, {
 		useCreateIndex: true,
 		useNewUrlParser: true,
 		promiseLibrary: global.Promise
 	})
 
-	// 连接错误
+	// ошибка соединения
 	mongoose.connection.on('error', error => {
-		consola.warn('数据库连接失败!', error)
+		consola.warn('Ошибка подключения к базе данных!', error)
 	})
 
-	// 连接成功
+	// соединение установлено
 	mongoose.connection.once('open', () => {
-		consola.ready('数据库连接成功!')
+		consola.ready('Соединение с базой данных успешно!')
 	})
 
-	// 自增 ID 初始化
+	// Инициализировать приращение идентификатора
 	autoIncrement.initialize(mongoose.connection)
 	
-	// 返回实例
+	// возвращаемся к экземпляру
 	return mongoose
 }
